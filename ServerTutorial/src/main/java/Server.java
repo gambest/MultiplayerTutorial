@@ -6,10 +6,15 @@ public class Server {
     public static void main(String[] args) {
         int port = 8080;
 
-        try {
-            ServerSocket serverSocket = new ServerSocket(port);
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
 
-            Socket clientSocket = serverSocket.accept();
+            System.out.println("Servidor escutando na porta: " + port);
+
+            while (true){
+                Socket clientSocket = serverSocket.accept();
+
+                new ClientHandler(clientSocket).start();
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
